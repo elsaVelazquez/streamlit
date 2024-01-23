@@ -1,18 +1,18 @@
 import toml
 import snowflake.connector
-import streamlit  # Add this line
+import streamlit as st  # Change this line
 
 # Load the secrets
 secrets = toml.load(".streamlit/secrets.toml")
 
 # Establish a connection
 conn = snowflake.connector.connect(
-    user=streamlit.secrets["user"]["username"],
-    password=streamlit.secrets["user"]["password"],
-    account=streamlit.secrets["user"]["account"],
-    warehouse=streamlit.secrets["user"]["warehouse"],
-    database=streamlit.secrets["user"]["database"],
-    schema=streamlit.secrets["user"]["schema"]
+    user=st.secrets["user"]["username"],
+    password=st.secrets["user"]["password"],
+    account=st.secrets["user"]["account"],
+    warehouse=st.secrets["user"]["warehouse"],
+    database=st.secrets["user"]["database"],
+    schema=st.secrets["user"]["schema"]
 )
 
 # Rest of your code...
