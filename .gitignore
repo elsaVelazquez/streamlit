@@ -6,3 +6,4 @@ __pycache__
 secrets.toml
 .streamlit/secrets.toml
 src/validate_credentials.py
+secrets.toml

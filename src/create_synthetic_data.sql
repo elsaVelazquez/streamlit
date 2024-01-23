@@ -39,3 +39,26 @@ VALUES
 ('2022-01-02', 'Soup-On', 'Average experience.', 3);
 
 -- Confirm the table was created correctly and view sample data
+
+
+-- Create the CHATBOT schema if it doesn't exist (unnecessary if it already exists)
+CREATE SCHEMA IF NOT EXISTS SNOWFLAKE.CHATBOT;
+
+CREATE TABLE IF NOT EXISTS CHATBOT.FINANCIAL_SYNTHETIC_SALES_DATA (
+    variable VARCHAR(255),
+    definition TEXT
+    -- Include other columns that are selected in the view creation script above
+);
+
+-- Create a table equivalent to the FINANCIAL_ENTITY_ANNUAL_TIME_SERIES view
+CREATE TABLE IF NOT EXISTS CHATBOT.FINANCIAL_SYNTHETIC_SALES_DATA (
+    entity_name VARCHAR(255),
+    city VARCHAR(255),
+    state_abbreviation VARCHAR(255),
+    variable_name VARCHAR(255),
+    year INT,
+    value DOUBLE,
+    unit VARCHAR(255),
+    definition TEXT
+    -- Include other columns that are selected in the view creation script above
+);

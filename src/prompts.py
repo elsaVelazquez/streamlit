@@ -1,16 +1,15 @@
+# example_prompts1.py
 import streamlit as st
+from validate_credentials import get_snowflake_connection
 
 SCHEMA_PATH = st.secrets.get("SCHEMA_PATH", "FROSTY_SAMPLE.CHATBOT")
-QUALIFIED_TABLE_NAME = f"{SCHEMA_PATH}.FINANCIAL_ENTITY_ANNUAL_TIME_SERIES"
+QUALIFIED_TABLE_NAME = f"{SCHEMA_PATH}.Synthetic_Sales_Data"
 TABLE_DESCRIPTION = """
 This table has various metrics for financial entities (also referred to as banks) since 1983.
 The user may describe the entities interchangeably as banks, financial institutions, or financial entities.
 """
-# This query is optional if running Frosty on your own table, especially a wide table.
-# Since this is a deep table, it's useful to tell Frosty what variables are available.
-# Similarly, if you have a table with semi-structured data (like JSON), it could be used to provide hints on available keys.
-# If altering, you may also need to modify the formatting logic in get_table_context() below.
-METADATA_QUERY = f"SELECT VARIABLE_NAME, DEFINITION FROM {SCHEMA_PATH}.FINANCIAL_ENTITY_ANNUAL_TIME_SERIES";
+
+METADATA_QUERY = f"SELECT VARIABLE_NAME, DEFINITION FROM {SCHEMA_PATH}.Synthetic_Sales_Data";
 
 GEN_SQL = """
 You will be acting as an AI Snowflake SQL Expert named Frosty.
@@ -51,12 +50,11 @@ def get_table_context(table_names: list, metadata_query: str = None):
     table_contexts = []
     for table_name in table_names:
         table = table_name.split(".")
-        conn = st.connection("snowflake")
-        columns = conn.query(f"""
+        conn = get_snowflake_connection()  # Use the singleton function for Snowflake connection
+        columns = conn.cursor().execute(f"""
             SELECT COLUMN_NAME, DATA_TYPE FROM {table[0].upper()}.INFORMATION_SCHEMA.COLUMNS
             WHERE TABLE_SCHEMA = '{table[1].upper()}' AND TABLE_NAME = '{table[2].upper()}'
-            """, show_spinner=False,
-        )
+            """).fetchall()
         columns = "\n".join(
             [
                 f"- **{columns['COLUMN_NAME'][i]}**: {columns['DATA_TYPE'][i]}"
@@ -84,7 +82,7 @@ def get_table_context(table_names: list, metadata_query: str = None):
 
 
 def get_system_prompt():
-    table_names = ['FROSTY_SAMPLE.CHATBOT.FINANCIAL_ENTITY_ANNUAL_TIME_SERIES', 'FROSTY_SAMPLE.CHATBOT.RESTAURANT_TIME_SERIES']
+    table_names = ['FROSTY_SAMPLE.CHATBOT.Synthetic_Sales_Data', 'FROSTY_SAMPLE.CHATBOT.Synthetic_Retail_Data']
     table_contexts = get_table_context(
         table_names=table_names,
         metadata_query=METADATA_QUERY
