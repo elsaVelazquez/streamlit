@@ -1,4 +1,15 @@
 # Frosty: Build a LLM Chatbot in Streamlit on your Snowflake Data
+streamlit run src/frosty_app.py   
+
+
+https://skool/prompt_engineering coming soon!!
+
+
+
+
+
+
+Stole like an artist from here:
 
 [![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://codespaces.new/Snowflake-Labs/sfguide-frosty-llm-chatbot-on-streamlit-snowflake?quickstart=1)
 
