@@ -1,64 +1,56 @@
--- Use the FROSTY_SAMPLE database
-USE FROSTY_SAMPLE;
-
--- Create the CHATBOT schema if it doesn't exist (unnecessary if it already exists)
 CREATE SCHEMA IF NOT EXISTS FROSTY_SAMPLE.CHATBOT;
 
--- Create a table equivalent to the FINANCIAL_ENTITY_ATTRIBUTES_LIMITED view
-CREATE TABLE IF NOT EXISTS CHATBOT.FINANCIAL_ENTITY_ATTRIBUTES_LIMITED (
-    variable VARCHAR(255),
-    definition TEXT
-    -- Include other columns that are selected in the view creation script above
-);
-
--- Create a table equivalent to the FINANCIAL_ENTITY_ANNUAL_TIME_SERIES view
-CREATE TABLE IF NOT EXISTS CHATBOT.FINANCIAL_ENTITY_ANNUAL_TIME_SERIES (
-    entity_name VARCHAR(255),
-    city VARCHAR(255),
-    state_abbreviation VARCHAR(255),
-    variable_name VARCHAR(255),
-    year INT,
-    value DOUBLE,
-    unit VARCHAR(255),
-    definition TEXT
-    -- Include other columns that are selected in the view creation script above
+CREATE OR REPLACE TABLE FROSTY_SAMPLE.CHATBOT.Synthetic_Sales_Data AS (
+    SELECT *
+    FROM (
+        VALUES
+            ('Company A', 'New York', 'NY', 'Net Sales', 2020, 'USD', 'Net sales represent the revenue from sales after deductions...', 200.00),
+            ('Company B', 'Los Angeles', 'CA', 'Gross Sales', 2020, 'USD', 'Gross sales represent the revenue from all sales...', 400.00),
+            ('Company A', 'New York', 'NY', 'Net Sales', 2021, 'USD', 'Net sales represent the revenue from sales after deductions...', 500.00),
+            ('Company B', 'Los Angeles', 'CA', 'Gross Sales', 2021, 'USD', 'Gross sales represent the revenue from all sales...', 600.00),
+            ('Company A', 'New York', 'NY', 'Net Sales', 2022, 'USD', 'Net sales represent the revenue from sales after deductions...', 700.00)
+    ) AS t("ENTITY_NAME", "CITY", "STATE_ABBREVIATION", "VARIABLE_NAME", "YEAR", "UNIT", "DEFINITION", "VALUE")
 );
 
 
-CREATE TABLE IF NOT EXISTS CHATBOT.RESTAURANT_TIME_SERIES (
-    date DATE,
-    restaurant_name VARCHAR(255),
-    review TEXT,
-    rating INTEGER
-);
-
-INSERT INTO CHATBOT.RESTAURANT_TIME_SERIES (date, restaurant_name, review, rating)
-VALUES
-('2022-01-01', 'Mexican Restaurant', 'Great food!', 5),
--- Add more rows as needed
-('2022-01-02', 'Soup-On', 'Average experience.', 3);
-
--- Confirm the table was created correctly and view sample data
 
 
--- Create the CHATBOT schema if it doesn't exist (unnecessary if it already exists)
-CREATE SCHEMA IF NOT EXISTS SNOWFLAKE.CHATBOT;
-
-CREATE TABLE IF NOT EXISTS CHATBOT.FINANCIAL_SYNTHETIC_SALES_DATA (
-    variable VARCHAR(255),
-    definition TEXT
-    -- Include other columns that are selected in the view creation script above
-);
-
--- Create a table equivalent to the FINANCIAL_ENTITY_ANNUAL_TIME_SERIES view
-CREATE TABLE IF NOT EXISTS CHATBOT.FINANCIAL_SYNTHETIC_SALES_DATA (
-    entity_name VARCHAR(255),
-    city VARCHAR(255),
-    state_abbreviation VARCHAR(255),
-    variable_name VARCHAR(255),
-    year INT,
-    value DOUBLE,
-    unit VARCHAR(255),
-    definition TEXT
-    -- Include other columns that are selected in the view creation script above
-);
+CREATE OR REPLACE TABLE Synthetic_Retail_Data AS  
+    SELECT 
+        "Retailer ID", 
+        "Retailer Name", 
+        "Retailer SKU", 
+        "UPC", 
+        "Model Number", 
+        "Title", 
+        "Brand", 
+        "Category", 
+        "Subcategory", 
+        "Week ID", 
+        "Month", 
+        "Year", 
+        "Traffic Type" AS "VARIABLE_NAME", -- Ensure this matches the exact casing as the column was created
+        "Traffic Description" AS "DEFINITION", 
+        "Traffic Value" AS "Value"
+    FROM (  
+        SELECT * FROM VALUES  
+            (1, 'Megastore.com', 'A1ALS6K1KP', '', '', 'Waterless Dog Shampoo, Volumizing Dog Shampoo for All Hair Types', 'SHIFAKOU', 'Hair Care', 'Dog Shampoo', 202319, 5, 2023, 'Organic Traffic', 'Organic traffic represents the visitors...', 100),  
+            (2, 'Megastore.com', 'A1ALS6K1KP', '', '', 'Waterless Dog Shampoo, Volumizing Dog Shampoo for All Hair Types', 'SHIFAKOU', 'Hair Care', 'Dog Shampoo', 202320, 5, 2023, 'Paid Traffic', 'Paid traffic represents the visitors...', 200)
+            -- Add more rows as needed for your synthetic data
+    ) AS t(
+        "Retailer ID", 
+        "Retailer Name", 
+        "Retailer SKU", 
+        "UPC", 
+        "Model Number", 
+        "Title", 
+        "Brand", 
+        "Category", 
+        "Subcategory", 
+        "Week ID", 
+        "Month", 
+        "Year", 
+        "Traffic Type", 
+        "Traffic Description", 
+        "Traffic Value"
+    );
