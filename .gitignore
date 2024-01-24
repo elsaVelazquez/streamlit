@@ -6,6 +6,6 @@ __pycache__
 secrets.toml
 .streamlit/secrets.toml
 secrets.toml
-backup_copies/*
-*backup_copies/*
+src/validate_credentials.py
+backup_copies/validate_credentials.py
 ```
